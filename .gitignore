@@ -5,3 +5,8 @@ __pycache__
 exemplodb.tsv
 exemplo2.tsv
 api_get_user.py
+Assertion_Evidence.csv
+Gene.csv
+Variant.csv
+Evidence.csv
+dbcreate.py

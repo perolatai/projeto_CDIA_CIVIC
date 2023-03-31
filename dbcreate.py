@@ -13,11 +13,11 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
-arquivos = glob.glob('*.tsv')
+arquivos = glob.glob('*.csv')
 
 dataframes = {}
 for i, file in enumerate(arquivos):
-    df = pd.read_csv(file, sep='\t')
+    df = pd.read_csv(file)
     df.fillna('NaN', inplace=True)
     dataframes[f'df_{i}'] = df
 
@@ -32,13 +32,18 @@ headers = [df.columns for df in dataframes.values()]
 dtypes_list = [df.dtypes.tolist() for df in dataframes.values()]
 lens = [len(dtypes_list[i]) for i in range(0, len(dtypes_list))]
 
-for i in arquivos_sem:
-    mycursor.execute("CREATE TABLE " + i +
-                     " (id INT AUTO_INCREMENT PRIMARY KEY)")
+chaves_primaria = []
+for n, v in enumerate(arquivos_sem):
+    chave_primaria = input(f'Qual a chave primária da tabela {v}?')
+    mycursor.execute(f"CREATE TABLE {v} ({chave_primaria} INT PRIMARY KEY)")
+    chaves_primaria.append(chave_primaria)
 
 for p in range(0, len(arquivos_sem)):
-    for i in range(0, lens[p]):
-        if dtypes_list[p][i] == 'int64':
+    for i, z in enumerate(headers[p]):
+        if chaves_primaria[p] == headers[p][i]:
+            pass
+        
+        elif dtypes_list[p][i] == 'int64':
             mycursor.execute(
                 "ALTER TABLE " + arquivos_sem[p] + " ADD COLUMN " + headers[p][i] + " INT")
         elif dtypes_list[p][i] == 'float64':
