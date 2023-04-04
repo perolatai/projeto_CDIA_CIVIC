@@ -83,7 +83,6 @@ def get_evidencias():
     )
 
 # GET para a tabela VARIANTES inteira;
-# Dando erro ainda
 @app.route('/variantes', methods=['GET'])
 def get_variantes():
     cursor.execute('SELECT * FROM variantes')
