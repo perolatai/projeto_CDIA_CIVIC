@@ -2,14 +2,14 @@ CREATE TABLE genes
 (
     entrez_id INTEGER PRIMARY KEY,
     gene VARCHAR(255),
-    description LONGTEXT
+    description TEXT
 );
 
 CREATE TABLE variantes
 (
     variant_id INTEGER PRIMARY KEY,
     variant VARCHAR(255),
-    summary LONGTEXT,
+    summary TEXT,
     start VARCHAR(255),
     stop VARCHAR(255),
     reference_bases VARCHAR(255),
@@ -38,7 +38,7 @@ CREATE TABLE evidencias
     evidence_direction VARCHAR(255),
     evidence_level VARCHAR(255),
     clinical_significance VARCHAR(255),
-    evidence_statement LONGTEXT,
+    evidence_statement TEXT,
     citation_id VARCHAR(255),
     source_type VARCHAR(255),
     citation VARCHAR(255),
