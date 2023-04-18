@@ -1,4 +1,4 @@
-import mysql.connector
+import psycopg2
 import pandas as pd
 from settings import *
 
@@ -27,13 +27,14 @@ df_Gene.rename(columns={'name': 'gene'}, inplace=True)
 col = df_Gene.pop('entrez_id')
 df_Gene.insert(0, 'entrez_id', col)
 
-mydb = mysql.connector.connect(
-    host=host,
-    user=user,
-    password=password,
-    database=database
-)
-mycursor = mydb.cursor()
+
+conn = psycopg2.connect(database=database,
+                        host=host,
+                        user=user,
+                        password=password,
+                        port="5432")
+
+mycursor = conn.cursor()
 
 
 def insert_dataframe_into_mysql(df, table_name, connection):
@@ -49,6 +50,6 @@ def insert_dataframe_into_mysql(df, table_name, connection):
     connection.commit()
 
 
-insert_dataframe_into_mysql(df_Gene, 'genes', mydb)
-insert_dataframe_into_mysql(df_Variant, 'variantes', mydb)
-insert_dataframe_into_mysql(df_Evidences, 'evidencias', mydb)
+insert_dataframe_into_mysql(df_Gene, 'genes', conn)
+insert_dataframe_into_mysql(df_Variant, 'variantes', conn)
+insert_dataframe_into_mysql(df_Evidences, 'evidencias', conn)
