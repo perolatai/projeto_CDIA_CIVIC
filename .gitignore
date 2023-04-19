@@ -4,3 +4,4 @@ venv
 __pycache__
 api_get_user.py
 dbcreate.py
+.vscode/settings.json

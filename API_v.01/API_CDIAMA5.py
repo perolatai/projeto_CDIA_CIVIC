@@ -1,22 +1,23 @@
 from flask import Flask, make_response, jsonify, request
-import mysql.connector
-from settings import *
+import psycopg2
 
 # Credenciais da base de dados
-mydb = mysql.connector.connect(
-    host = host,
-    user = user,
-    password = password,
-    database = database
-)
+conn = psycopg2.connect(
+    database=database,
+    host=host,
+    user=user,
+    password=password,
+    port=port)
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 
 # Cursor
-cursor = mydb.cursor()
+cursor = conn.cursor()
 
 # GET para a tabela GENES inteira;
+
+
 @app.route('/genes', methods=['GET'])
 def get_genes():
     cursor.execute('SELECT * FROM genes')
@@ -27,20 +28,22 @@ def get_genes():
     for gene in lista_genes:
         genes.append(
             {
-                'id':gene[0],
-                'gene':gene[1],
-                'descrição':gene[2]
+                'id': gene[0],
+                'gene': gene[1],
+                'descrição': gene[2]
             }
         )
 
     return make_response(
         jsonify(
-            message ='Genes:',
-            data = genes
+            message='Genes:',
+            data=genes
         )
     )
 
 # GET para a tabela EVIDENCIAS inteira;
+
+
 @app.route('/evidencias', methods=['GET'])
 def get_evidencias():
     cursor.execute('SELECT * FROM evidencias')
@@ -77,12 +80,14 @@ def get_evidencias():
 
     return make_response(
         jsonify(
-            message ='Evidencias',
-            data = evidencias
+            message='Evidencias',
+            data=evidencias
         )
     )
 
 # GET para a tabela VARIANTES inteira;
+
+
 @app.route('/variantes', methods=['GET'])
 def get_variantes():
     cursor.execute('SELECT * FROM variantes')
@@ -93,30 +98,32 @@ def get_variantes():
     for variante in lista_variantes:
         variantes.append(
             {
-                'variant_id':variante[0],
-                'variant':variante[1],
-                'summary':variante[2],
-                'start':variante[3],
-                'stop':variante[4],
-                'reference_bases':variante[5],
-                'variant_bases':variante[6],
-                'representative_transcript':variante[7],
-                'ensembl_version':variante[8],
-                'reference_build':variante[9],
-                'variant_types':variante[10],
-                'hgvs_expressions':variante[11],
-                'civic_variant_evidence_score':variante[12],
-                'allele_registry_id':variante[13],
-                'clinvar_ids':variante[14],
-                'variant_aliases':variante[15]
+                'variant_id': variante[0],
+                'variant': variante[1],
+                'summary': variante[2],
+                'start': variante[3],
+                'stop': variante[4],
+                'reference_bases': variante[5],
+                'variant_bases': variante[6],
+                'representative_transcript': variante[7],
+                'ensembl_version': variante[8],
+                'reference_build': variante[9],
+                'variant_types': variante[10],
+                'hgvs_expressions': variante[11],
+                'civic_variant_evidence_score': variante[12],
+                'allele_registry_id': variante[13],
+                'clinvar_ids': variante[14],
+                'variant_aliases': variante[15]
             }
         )
 
     return make_response(
         jsonify(
-            message ='Variantes:',
-            data = variantes
+            message='Variantes:',
+            data=variantes
         )
     )
 
-app.run()
+
+if __name__ == "__main__":
+    app.run()

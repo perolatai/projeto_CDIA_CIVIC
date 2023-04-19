@@ -1,6 +1,5 @@
-import psycopg2
 import pandas as pd
-from settings import *
+import psycopg2
 
 df_Evidences = pd.read_csv(
     'projeto_CIVIC/01-Apr-2022-ClinicalEvidenceSummaries.csv')
@@ -28,11 +27,12 @@ col = df_Gene.pop('entrez_id')
 df_Gene.insert(0, 'entrez_id', col)
 
 
-conn = psycopg2.connect(database=database,
-                        host=host,
-                        user=user,
-                        password=password,
-                        port="5432")
+conn = psycopg2.connect(
+    database=database,
+    host=host,
+    user=user,
+    password=password,
+    port=port)
 
 mycursor = conn.cursor()
 
