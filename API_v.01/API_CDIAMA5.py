@@ -1,25 +1,27 @@
-from flask import Flask, make_response, jsonify, request
 import psycopg2
-
-# Credenciais da base de dados
-conn = psycopg2.connect(
-    database=database,
-    host=host,
-    user=user,
-    password=password,
-    port=port)
+from flask import Flask, jsonify, make_response, request
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 
-# Cursor
-cursor = conn.cursor()
+# Credenciais da base de dados
+
+
+def db_connect():
+    conn = psycopg2.connect(database=database,
+                            host=host,
+                            user=user,
+                            password=password,
+                            port=port)
+    cursor = conn.cursor()
+    return cursor, conn
 
 # GET para a tabela GENES inteira;
 
 
 @app.route('/genes', methods=['GET'])
 def get_genes():
+    cursor, conn = db_connect()
     cursor.execute('SELECT * FROM genes')
     lista_genes = cursor.fetchall()
 
@@ -34,6 +36,8 @@ def get_genes():
             }
         )
 
+    conn.close()
+
     return make_response(
         jsonify(
             message='Genes:',
@@ -46,6 +50,7 @@ def get_genes():
 
 @app.route('/evidencias', methods=['GET'])
 def get_evidencias():
+    cursor, conn = db_connect()
     cursor.execute('SELECT * FROM evidencias')
     lista_evidencias = cursor.fetchall()
 
@@ -77,7 +82,7 @@ def get_evidencias():
                 'is_flagged': evidencia[20]
             }
         )
-
+    conn.close()
     return make_response(
         jsonify(
             message='Evidencias',
@@ -85,11 +90,13 @@ def get_evidencias():
         )
     )
 
+
 # GET para a tabela VARIANTES inteira;
 
 
 @app.route('/variantes', methods=['GET'])
 def get_variantes():
+    cursor, conn = db_connect()
     cursor.execute('SELECT * FROM variantes')
     lista_variantes = cursor.fetchall()
 
@@ -116,7 +123,7 @@ def get_variantes():
                 'variant_aliases': variante[15]
             }
         )
-
+    conn.close()
     return make_response(
         jsonify(
             message='Variantes:',
